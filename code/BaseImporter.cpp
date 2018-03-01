@@ -3,7 +3,8 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2017, assimp team
+Copyright (c) 2006-2018, assimp team
+
 
 
 All rights reserved.
@@ -44,10 +45,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *  @brief Implementation of BaseImporter
  */
 
-#include "BaseImporter.h"
+#include <assimp/BaseImporter.h>
 #include "FileSystemFilter.h"
 #include "Importer.h"
-#include "ByteSwapper.h"
+#include <assimp/ByteSwapper.h>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -156,9 +157,6 @@ void BaseImporter::GetExtensionList(std::set<std::string>& extensions)
         // read 200 characters from the file
         std::unique_ptr<char[]> _buffer (new char[searchBytes+1 /* for the '\0' */]);
         char* buffer = _buffer.get();
-        if( NULL == buffer ) {
-            return false;
-        }
 
         const size_t read = pStream->Read(buffer,1,searchBytes);
         if( !read ) {
@@ -180,9 +178,17 @@ void BaseImporter::GetExtensionList(std::set<std::string>& extensions)
         }
         *cur2 = '\0';
 
+        std::string token;
         for (unsigned int i = 0; i < numTokens;++i) {
-            ai_assert(NULL != tokens[i]);
-            const char* r = strstr(buffer,tokens[i]);
+            ai_assert( nullptr != tokens[i] );
+            size_t len( strlen( tokens[ i ] ) );
+            token.clear();
+            const char *ptr( tokens[ i ] );
+            for ( size_t tokIdx = 0; tokIdx < len; ++tokIdx ) {
+                token.push_back( tolower( *ptr ) );
+                ++ptr;
+            }
+            const char* r = strstr( buffer, token.c_str() );
             if( !r ) {
                 continue;
             }
