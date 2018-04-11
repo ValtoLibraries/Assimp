@@ -147,10 +147,7 @@ void AllocateFromAssimpHeap::operator delete[] ( void* data)    {
 // ------------------------------------------------------------------------------------------------
 // Importer constructor.
 Importer::Importer()
- : pimpl( NULL ) {
-    // allocate the pimpl first
-    pimpl = new ImporterPimpl();
-
+ : pimpl( new ImporterPimpl ) {
     pimpl->mScene = NULL;
     pimpl->mErrorString = "";
 
@@ -622,7 +619,6 @@ const aiScene* Importer::ReadFile( const char* _pFile, unsigned int pFlags)
             if (s != std::string::npos) {
                 DefaultLogger::get()->info("File extension not known, trying signature-based detection");
                 for( unsigned int a = 0; a < pimpl->mImporter.size(); a++)  {
-
                     if( pimpl->mImporter[a]->CanRead( pFile, pimpl->mIOHandler, true)) {
                         imp = pimpl->mImporter[a];
                         break;
@@ -947,6 +943,7 @@ BaseImporter* Importer::GetImporter (const char* szExtension) const
 size_t Importer::GetImporterIndex (const char* szExtension) const
 {
     ai_assert(szExtension);
+
     ASSIMP_BEGIN_EXCEPTION_REGION();
 
     // skip over wildcard and dot characters at string head --
