@@ -2,7 +2,7 @@
 Open Asset Import Library (assimp)
 ----------------------------------------------------------------------
 
-Copyright (c) 2006-2018, assimp team
+Copyright (c) 2006-2019, assimp team
 
 
 All rights reserved.
@@ -864,6 +864,8 @@ bool OgreBinarySerializer::ImportSkeleton(Assimp::IOSystem *pIOHandler, Mesh *me
     }
 
     MemoryStreamReaderPtr reader = OpenReader(pIOHandler, mesh->skeletonRef);
+    if (!reader)
+      return false;
 
     Skeleton *skeleton = new Skeleton();
     OgreBinarySerializer serializer(reader.get(), OgreBinarySerializer::AM_Skeleton);

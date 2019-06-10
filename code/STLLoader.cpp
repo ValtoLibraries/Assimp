@@ -3,7 +3,7 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2018, assimp team
+Copyright (c) 2006-2019, assimp team
 
 
 
@@ -278,6 +278,7 @@ void STLImporter::LoadASCIIFile( aiNode *root ) {
             }
             std::string name( szMe, temp );
             node->mName.Set( name.c_str() );
+            pMesh->mName.Set( name.c_str() );
             //pScene->mRootNode->mName.length = temp;
             //memcpy(pScene->mRootNode->mName.data,szMe,temp);
             //pScene->mRootNode->mName.data[temp] = '\0';
